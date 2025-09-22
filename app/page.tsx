@@ -1,31 +1,53 @@
 import './page.css';
-import Avatar from '@/components/Avatar';
+import PostList from "@/components/PostList";
 
 export default function Home() {
+  const posts = [
+    { 
+      id: 1, 
+      title: "첫 번째 포스트", 
+      content: "이것은 첫 번째 포스트입니다.",
+      username: "woon", 
+    },
+    { 
+      id: 2, 
+      title: "두 번째 포스트", 
+      content: "이것은 두 번째 포스트입니다.",
+      username: "woon", 
+    },
+    { 
+      id: 3, 
+      title: "세 번째 포스트", 
+      content: "이것은 세 번째 포스트입니다.",
+      username: "woon", 
+    },
+    { 
+      id: 4, 
+      title: "네 번째 포스트", 
+      content: "이것은 네 번째 포스트입니다.",
+      username: "woon", 
+    },
+    {
+      id: 5,
+      title: "다섯 번째 포스트",
+      content: "이것은 다섯 번째 포스트입니다.",
+      username: "woon",
+    },
+  ];
 
   return (
-    <main>
-      <div className='container'>
-        <h1>wooridle</h1>
-
-        <a href="/about">
-          <Avatar imageUrl='https://www.wooncloud.com/_app/immutable/assets/logo.VYlMOeSY.png' />
-          <p>About me</p>
-        </a>
-
-        <div className="divider">프로필</div>
-
-        <a href="/blog" className="btn btn-block btn-primary">블로그</a>
-        <br/>
-
-        <a href="https://github.com/wooncloud" className="btn btn-block btn-primary">깃허브</a>
-
-        <div className="divider">사이드 프로젝트</div>
-
-        <button className="btn btn-block">프로젝트1</button>
-        <br/>
-        <button className="btn btn-block">프로젝트2</button>
-      </div>
-    </main>
+    <div className="w-100">
+      <ul className="list">
+        {posts.map((post) => (
+          <PostList
+            key={post.id}
+            id={post.id}
+            title={post.title}
+            username={post.username}
+            content={post.content}
+          />
+        ))}
+      </ul>
+    </div>
   );
 }
