@@ -12,7 +12,7 @@ export default function CommentForm() {
         ></textarea>
         <div className="flex items-center justify-between mt-3">
           <div className="flex items-center space-x-2"></div>
-          <button className="btn btn-primary btn-sm">
+          <button className="btn btn-neutral btn-sm">
             작성
           </button>
         </div>

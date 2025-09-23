@@ -31,13 +31,9 @@ export default function NewPostPage() {
         {/* Action Buttons */}
         <div className="flex items-center justify-end space-x-3 pt-4">
           <Link href="/">
-            <button className="btn btn-ghost">
-              취소
-            </button>
+            <button className="btn btn-ghost">취소</button>
           </Link>
-          <button className="btn btn-primary">
-            Submit
-          </button>
+          <button className="btn btn-neutral">작성</button>
         </div>
       </div>
     </div>

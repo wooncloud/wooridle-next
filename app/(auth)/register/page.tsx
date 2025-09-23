@@ -65,7 +65,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="form-control mt-8">
-            <button type="submit" className="btn btn-primary w-full text-lg">
+            <button type="submit" className="btn btn-neutral w-full text-lg">
               회원가입
             </button>
           </div>
