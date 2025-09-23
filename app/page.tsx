@@ -1,5 +1,5 @@
-import './page.css';
-import PostList from "@/components/PostList";
+import './page.module.css';
+import PostList from "@/components/post/PostList";
 
 export default function Home() {
   const posts = [
