@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Dock() {
   return (
@@ -14,15 +15,17 @@ export default function Dock() {
         <span className="dock-label">홈</span>
       </button>
 
-      <button className="dock-active">
-        <Image
-          src="/inbox-icon.svg"
-          alt="Inbox"
-          width={24}
-          height={24}
-          className="size-[1.2em]"
-        />
-        <span className="dock-label">글쓰기</span>
+      <button>
+        <Link href="/posting">
+          <Image
+            src="/inbox-icon.svg"
+            alt="Inbox"
+            width={24}
+            height={24}
+            className="size-[1.2em]"
+          />
+          <span className="dock-label">글쓰기</span>
+        </Link>
       </button>
 
       <button>
