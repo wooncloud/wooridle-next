@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="bg-base-300">
+    <>
       <header className={style.header}>
         <Navbar />
       </header>
@@ -25,6 +25,6 @@ export default function RootLayout({
       <footer>
         <Dock />
       </footer>
-    </div>
+    </>
   );
 }
