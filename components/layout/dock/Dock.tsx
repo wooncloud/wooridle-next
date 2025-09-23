@@ -1,4 +1,3 @@
-import style from './Dock.module.css';
 import Image from 'next/image';
 
 export default function Dock() {
@@ -12,7 +11,7 @@ export default function Dock() {
           height={24}
           className="size-[1.2em]"
         />
-        <span className="dock-label">Home</span>
+        <span className="dock-label">홈</span>
       </button>
 
       <button className="dock-active">
@@ -23,7 +22,7 @@ export default function Dock() {
           height={24}
           className="size-[1.2em]"
         />
-        <span className="dock-label">Inbox</span>
+        <span className="dock-label">글쓰기</span>
       </button>
 
       <button>
@@ -34,7 +33,7 @@ export default function Dock() {
           height={24}
           className="size-[1.2em]"
         />
-        <span className="dock-label">Settings</span>
+        <span className="dock-label">세팅</span>
       </button>
     </div>
   );
