@@ -1,14 +1,14 @@
 interface CommentProps {
   id: number;
   author: string;
-  timeAgo: string;
+  createdAt: string;
   content: string;
 }
 
 export default function Comment({
   id,
   author,
-  timeAgo,
+  createdAt,
   content,
 }: CommentProps) {
   return (
@@ -20,7 +20,7 @@ export default function Comment({
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
             <span className="font-semibold text-base-content">{author}</span>
-            <span className="text-base-content/70 text-sm">{timeAgo}</span>
+            <span className="text-base-content/70 text-sm">{createdAt}</span>
           </div>
           <p className="text-base-content">{content}</p>
         </div>

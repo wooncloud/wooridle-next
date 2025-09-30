@@ -17,7 +17,7 @@ export default function PostList(props: {
             {username}
           </div>
         </div>
-        <p className="list-col-wrap text-xs">
+        <p className="list-col-wrap text-xs overflow-hidden whitespace-nowrap text-ellipsis">
           {content}
         </p>
       </li>

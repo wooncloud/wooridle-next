@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Comment from '@/components/post/Comment';
 import CommentForm from '@/components/post/CommentForm';
+import { formatDate } from '@/lib/format';
 
 interface PageProps {
   params: {
@@ -8,34 +9,53 @@ interface PageProps {
   },
 }
 
-export default function PostPage({ params }: PageProps) {
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  authorName: string;
+  authorId: number;
+  createdAt: string;
+  updatedAt: string;
+  commentsCount: number;
+}
+
+interface CommentType {
+  id: number;
+  content: string;
+  authorName: string;
+  authorId: number;
+  postId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+async function getPostData(id: string): Promise<{ post: Post | null; comments: CommentType[] }> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    
+    const [postRes, commentsRes] = await Promise.all([
+      fetch(`${baseUrl}/api/posts/${id}`, { cache: 'no-store' }),
+      fetch(`${baseUrl}/api/comments/post/${id}`, { cache: 'no-store' })
+    ]);
+
+    const post = postRes.ok ? await postRes.json() : null;
+    const comments = commentsRes.ok ? await commentsRes.json() : [];
+
+    return { post, comments };
+  } catch (error) {
+    console.error('Error fetching post data:', error);
+    return { post: null, comments: [] };
+  }
+}
+
+export default async function PostPage({ params }: PageProps) {
   const { id } = params;
+  const { post, comments } = await getPostData(id);
 
-  // 임시 데이터 (실제로는 API에서 가져올 데이터)
-  const post = {
-    id: parseInt(id),
-    title: "Tech Industry Trends",
-    author: "Alex Turner",
-    timeAgo: "2d ago",
-    content: "The tech industry is rapidly evolving, with new technologies emerging constantly. Key trends include the rise of AI and machine learning, the expansion of cloud computing, and the growing importance of cybersecurity. These trends are shaping the future of work and creating new opportunities for innovation and growth.",
-    comments: 45,
-    shares: 10
-  };
-
-  const comments = [
-    {
-      id: 1,
-      author: "Sophia Clark",
-      timeAgo: "1d ago",
-      content: "Great insights! I'm particularly interested in the implications of AI on job markets.",
-    },
-    {
-      id: 2,
-      author: "Ethan Reed",
-      timeAgo: "1d ago",
-      content: "I agree, Sophia. The shift towards cloud computing is also creating new roles in data management.",
-    }
-  ];
+  if (!post) {
+    return <div className="p-4">게시글을 찾을 수 없습니다.</div>;
+  }
 
   return (
     <div className="p-4">
@@ -55,9 +75,9 @@ export default function PostPage({ params }: PageProps) {
         <h2 className="text-2xl font-bold text-base-content mb-4">{post.title}</h2>
 
         <div className="flex items-center text-base-content/70 mb-6">
-          <span>By {post.author}</span>
+          <span>By {post.authorName}</span>
           <span className="mx-2">•</span>
-          <span>{post.timeAgo}</span>
+          <span>{formatDate(post.createdAt)}</span>
         </div>
 
         <p className="text-base-content leading-relaxed">
@@ -77,8 +97,8 @@ export default function PostPage({ params }: PageProps) {
             <Comment
               key={comment.id}
               id={comment.id}
-              author={comment.author}
-              timeAgo={comment.timeAgo}
+              author={comment.authorName}
+              createdAt={formatDate(comment.createdAt)}
               content={comment.content}
             />
           ))}
