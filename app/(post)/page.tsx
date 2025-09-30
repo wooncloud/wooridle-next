@@ -1,29 +1,62 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
 import styles from './page.module.css';
 import PostList from "@/components/post/PostList";
 
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  authorName: string;
+  authorId: number;
+  createdAt: string;
+  updatedAt: string;
+  commentsCount: number;
+}
+
 export default function Home() {
-  const posts = [
-    { id: 1, title: "첫 번째 포스트", content: "이것은 첫 번째 포스트입니다.",username: "woon", },
-    { id: 2, title: "두 번째 포스트", content: "이것은 두 번째 포스트입니다.",username: "woon", },
-    { id: 3, title: "세 번째 포스트", content: "이것은 세 번째 포스트입니다.",username: "woon", },
-    { id: 4, title: "네 번째 포스트", content: "이것은 네 번째 포스트입니다.",username: "woon", },
-    { id: 5, title: "다섯 번째 포스트",content: "이것은 다섯 번째 포스트입니다.",username: "woon",},
-    { id: 6, title: "첫 번째 포스트", content: "이것은 첫 번째 포스트입니다.",username: "woon", },
-    { id: 7, title: "두 번째 포스트", content: "이것은 두 번째 포스트입니다.",username: "woon", },
-    { id: 8, title: "세 번째 포스트", content: "이것은 세 번째 포스트입니다.",username: "woon", },
-    { id: 9, title: "네 번째 포스트", content: "이것은 네 번째 포스트입니다.",username: "woon", },
-    { id: 10, title: "다섯 번째 포스트",content: "이것은 다섯 번째 포스트입니다.",username: "woon",},
-    { id: 11, title: "첫 번째 포스트", content: "이것은 첫 번째 포스트입니다.",username: "woon", },
-    { id: 12, title: "두 번째 포스트", content: "이것은 두 번째 포스트입니다.",username: "woon", },
-    { id: 13, title: "세 번째 포스트", content: "이것은 세 번째 포스트입니다.",username: "woon", },
-    { id: 14, title: "네 번째 포스트", content: "이것은 네 번째 포스트입니다.",username: "woon", },
-    { id: 15, title: "다섯 번째 포스트",content: "이것은 다섯 번째 포스트입니다.",username: "woon",},
-    { id: 16, title: "첫 번째 포스트", content: "이것은 첫 번째 포스트입니다.",username: "woon", },
-    { id: 17, title: "두 번째 포스트", content: "이것은 두 번째 포스트입니다.",username: "woon", },
-    { id: 18, title: "세 번째 포스트", content: "이것은 세 번째 포스트입니다.",username: "woon", },
-    { id: 19, title: "네 번째 포스트", content: "이것은 네 번째 포스트입니다.",username: "woon", },
-    { id: 20, title: "다섯 번째 포스트",content: "이것은 다섯 번째 포스트입니다.",username: "woon",},
-  ];
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const observerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      if (isLoading) return;
+      
+      setIsLoading(true);
+      const response = await fetch(`/api/posts?page=${page}&size=50`);
+      const data = await response.json();
+      const contents = data.content || [];
+
+      setHasMore(contents.length > 0);
+
+      // 중복 제거
+      setPosts((prev) => {
+        const prevIds = new Set(prev.map((p) => p.id));
+        const newPosts = contents.filter((c: Post) => !prevIds.has(c.id));
+        return [...prev, ...newPosts];
+      });
+      setIsLoading(false);
+    };
+
+    fetchPosts();
+  }, [page]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !isLoading) {
+        setPage((prev) => prev + 1);
+      }
+    });
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+    return () => observer.disconnect();
+  }, [isLoading]);
 
   return (
     <div className={styles.container}>
@@ -33,10 +66,11 @@ export default function Home() {
             key={post.id}
             id={post.id}
             title={post.title}
-            username={post.username}
+            username={post.authorName}
             content={post.content}
           />
         ))}
+        {hasMore && <div ref={observerRef} style={{ height: '1px' }} />}
       </ul>
     </div>
   );
