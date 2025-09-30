@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Toaster } from "@/components/Toast";
 
 export default function RootLayout({
   children,
@@ -9,6 +10,7 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         {children}
+        <Toaster />
       </body>
     </html>
   );

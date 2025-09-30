@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from '@/components/Toast';
 
 interface FormData {
   title: string;
@@ -63,7 +64,7 @@ export default function NewPostPage() {
     // 토큰 확인
     const token = localStorage.getItem('token');
     if (!token) {
-      alert('로그인이 필요합니다.');
+      toast('로그인이 필요합니다.', 'error');
       router.push('/login');
       return;
     }
@@ -86,21 +87,21 @@ export default function NewPostPage() {
       const data = await response.json();
 
       if (response.ok) {
-        alert('게시글이 성공적으로 작성되었습니다!');
+        toast('게시글이 성공적으로 작성되었습니다!', 'success');
         router.push('/'); // 홈페이지로 리다이렉트
       } else {
         // 401 에러인 경우 로그인 페이지로 리다이렉트
         if (response.status === 401) {
-          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          toast('로그인이 만료되었습니다. 다시 로그인해주세요.', 'error');
           localStorage.removeItem('token');
           router.push('/login');
         } else {
-          alert(data.error || '게시글 작성에 실패했습니다.');
+          toast(data.error || '게시글 작성에 실패했습니다.', 'error');
         }
       }
     } catch (error) {
       console.error('Post creation error:', error);
-      alert('네트워크 오류가 발생했습니다.');
+      toast('네트워크 오류가 발생했습니다.', 'error');
     } finally {
       setIsLoading(false);
     }

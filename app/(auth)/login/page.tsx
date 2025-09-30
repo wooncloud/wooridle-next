@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from '@/components/Toast';
 
 interface FormData {
   userId: string;
@@ -78,14 +79,14 @@ export default function LoginPage() {
           localStorage.setItem('token', data.token);
         }
 
-        alert('로그인이 완료되었습니다!');
+        toast('로그인이 완료되었습니다!', 'success');
         router.push('/'); // 홈페이지로 리다이렉트
       } else {
-        alert(data.error || '로그인에 실패했습니다.');
+        toast(data.error || '로그인에 실패했습니다.', 'error');
       }
     } catch (error) {
       console.error('Login error:', error);
-      alert('네트워크 오류가 발생했습니다.');
+      toast('네트워크 오류가 발생했습니다.', 'error');
     } finally {
       setIsLoading(false);
     }
